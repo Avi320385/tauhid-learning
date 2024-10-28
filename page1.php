@@ -1,6 +1,7 @@
 
 <?php
 //error_reporting(false);
+//Database Connection
 class Db{
     public $stmt;
     const DBNAME="tauhid";
@@ -16,7 +17,7 @@ class Db{
     }
 }
 
-
+//Insert Data
 class InsertData extends Db
 {
     public $name;
@@ -89,4 +90,37 @@ class CarerInfo extends Db
                 $stmt->execute();
             }  
 }
+
+// Start view
+
+class View extends Db
+{
+         public  $data;
+        final public function selctAll()
+        {
+            $pdo=Db::connection(self::DBNAME,self::USERNAME);
+            $stmt=$pdo->prepare("select * from biritable");
+            $stmt->execute();
+            $this->data=$stmt->fetchAll(PDO::FETCH_OBJ);
+            $this->stmt = $stmt;
+            return $this;
+        } 
+
+    }
+
+    //Delete Start
+    class Delet extends Db 
+    {
+         public $id;
+        public function delete()
+      {
+             $this->id=$_GET['id'];
+              $pdo=Db::connection(self::DBNAME,self::USERNAME);
+              $stmt = $pdo->prepare("DELETE  from biritable where id =$this->id");
+              $stmt->execute();
+              if ($stmt) {
+          header("Location: View.php");
+    }
+    }
+    }
 
